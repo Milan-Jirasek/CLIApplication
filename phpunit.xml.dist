@@ -23,6 +23,6 @@
     </filter>
 
     <logging>
-        <log type="coverage-html" target="build/php/coverage"/>
+        <log type="coverage-html" target="build/coverage"/>
     </logging>
 </phpunit>
