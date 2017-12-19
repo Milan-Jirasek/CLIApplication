@@ -1,0 +1,6 @@
+location_api:
+    wsdl: "http://www.webservicex.net/uklocation.asmx?WSDL"
+    cities:
+        get_counts:
+            from: 2
+            to: 3
