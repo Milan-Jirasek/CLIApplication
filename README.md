@@ -1,0 +1,2 @@
+# CLIApplication
+Domácí úkol :)
