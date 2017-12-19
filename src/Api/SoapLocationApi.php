@@ -8,7 +8,6 @@ use BeSimple\SoapClient\SoapClientOptionsBuilder;
 use BeSimple\SoapCommon\SoapOptionsBuilder;
 use BeSimple\SoapCommon\SoapRequest;
 use CLIApplication\Configuration\SoapYamlFileConfiguration;
-use CLIApplication\Entity\Location;
 use CLIApplication\Exception\BadSearchedCityCount;
 use CLIApplication\Manager\ManagerInterface;
 
