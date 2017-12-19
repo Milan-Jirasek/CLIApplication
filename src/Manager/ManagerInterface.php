@@ -14,5 +14,5 @@ interface ManagerInterface
      *
      * @return mixed
      */
-    public function create(): mixed;
+    public function create();
 }

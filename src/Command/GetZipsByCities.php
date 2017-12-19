@@ -31,7 +31,7 @@ class GetZipsByCities extends Command
 
     protected function configure()
     {
-        $this->setName("location:get-zip")
+        $this->setName("api:location:get-zip")
             ->setDescription("Get zip codes by cities' names");
     }
 }

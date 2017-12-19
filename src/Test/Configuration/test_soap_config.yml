@@ -1,0 +1,6 @@
+location_api:
+    wsdl: "testovací wsdl"
+    cities:
+        get_counts:
+            from: 5
+            to: 50

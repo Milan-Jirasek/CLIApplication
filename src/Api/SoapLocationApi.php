@@ -7,7 +7,6 @@ use BeSimple\SoapClient\SoapClientBuilder;
 use BeSimple\SoapClient\SoapClientOptionsBuilder;
 use BeSimple\SoapCommon\SoapOptionsBuilder;
 use BeSimple\SoapCommon\SoapRequest;
-use CLIApplication\Configuration\LocationConfigurationInterface;
 use CLIApplication\Configuration\SoapYamlFileConfiguration;
 
 /**
