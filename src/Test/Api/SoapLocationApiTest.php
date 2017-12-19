@@ -4,10 +4,13 @@ namespace CLIApplication\Test\Api;
 
 use BeSimple\SoapClient\SoapClient;
 use BeSimple\SoapClient\SoapClientBuilder;
+use BeSimple\SoapClient\SoapResponse;
 use BeSimple\SoapCommon\SoapRequest;
 use CLIApplication\Api\SoapLocationApi;
 use CLIApplication\Configuration\SoapYamlFileConfiguration;
 use CLIApplication\Entity\Location;
+use CLIApplication\Exception\BadSearchedCityCount;
+use CLIApplication\Manager\LocationManager;
 use PHPUnit\Framework\TestCase;
 
 class SoapLocationApiTest extends TestCase
@@ -20,16 +23,25 @@ class SoapLocationApiTest extends TestCase
         $this->api = new SoapLocationApi(
             $this->getSoapBuilderMock(),
             $this->getSoapRequestMock(),
-            $this->getSoapYamlFileConfigurationMock()
+            $this->getSoapYamlFileConfigurationMock(),
+            $this->getLocationManagerMock()
         );
     }
 
     public function testGetLocationsByCities()
     {
-        $locations = $this->api->getLocationsByCities(["Testík", "Magic", "London"]);
-        foreach ($locations as $location) {
-            $this->assertInstanceOf(Location::class, $location);
+        $allLocations = $this->api->getLocationsByCities(["Test", "London"]);
+        foreach ($allLocations as $originalSearched => $locations) {
+            foreach ($locations as $location) {
+                $this->assertInstanceOf(Location::class, $location);
+            }
         }
+    }
+
+    public function testGetLocationsByCitiesFail()
+    {
+        $this->expectException(BadSearchedCityCount::class);
+        $allLocations = $this->api->getLocationsByCities(["Test"]);
     }
 
     protected function getSoapBuilderMock()
@@ -53,9 +65,38 @@ class SoapLocationApiTest extends TestCase
 
         $clientMock
             ->method("soapCall")
-            ->will($this->returnValue("TODO"));
+            ->will($this->returnValue($this->getSoapResponseMock()));
 
         return $clientMock;
+    }
+
+    protected function getSoapResponseMock()
+    {
+        $responseMock = $this->getMockBuilder(SoapResponse::class)
+            ->setMethods(["getResponseObject"])
+            ->getMock();
+
+        $responseObject = new \stdClass();
+        $responseObject->GetUKLocationByTownResult = "
+            <NewDataSet>
+                <Table>
+                    <Town>Little London</Town>
+                    <County>East Sussex</County>
+                    <PostCode>TN21</PostCode>
+                </Table>
+                <Table>
+                    <Town>Little London</Town>
+                    <County>Hampshire</County>
+                    <PostCode>RG26</PostCode>
+                </Table>
+            </NewDataSet>
+        ";
+
+        $responseMock
+            ->method("getResponseObject")
+            ->will($this->returnValue($responseObject));
+
+        return $responseMock;
     }
 
     protected function getSoapRequestMock()
@@ -73,18 +114,30 @@ class SoapLocationApiTest extends TestCase
 
         $configurationMock
             ->method("getWsdl")
-            ->will($this->returnValue("http://www.webservicex.net/uklocation.asmx?WSDL"));
+            ->will($this->returnValue("some WSDL"));
+
+        $valueMap = [
+            [1, false],
+            [2, true]
+        ];
 
         $configurationMock
             ->method("hasLocationGetterAllowedCitiesCount")
-            ->with(1)
-            ->will($this->returnValue(false));
-
-        $configurationMock
-            ->method("hasLocationGetterAllowedCitiesCount")
-            ->with(2)
-            ->will($this->returnValue(true));
+            ->will($this->returnValueMap($valueMap));
 
         return $configurationMock;
+    }
+
+    protected function getLocationManagerMock()
+    {
+        $managerMock = $this->getMockBuilder(LocationManager::class)
+            ->setMethods(["create"])
+            ->getMock();
+
+        $managerMock
+            ->method("create")
+            ->will($this->returnValue(new Location()));
+
+        return $managerMock;
     }
 }

@@ -14,8 +14,9 @@ class LocationTest extends TestCase
     {
         $this->entity = new Location();
         $this->entity
-            ->setCity("Městečko")
-            ->setZip("PSČ");
+            ->setCity("Lil'City")
+            ->setZip("ZipCode")
+            ->setCounty("BeautifulCounty");
     }
 
     /**
@@ -29,8 +30,9 @@ class LocationTest extends TestCase
     public function locationDataProvider()
     {
         return [
-            "test getCity" => ["getCity", "Městečko"],
-            "test getZip" => ["getZip", "PSČ"],
+            "test getCity" => ["getCity", "Lil'City"],
+            "test getZip" => ["getZip", "ZipCode"],
+            "test getCounty" => ["getCounty", "BeautifulCounty"],
         ];
     }
 }

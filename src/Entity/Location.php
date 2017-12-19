@@ -12,12 +12,17 @@ class Location
     /**
      * @var string
      */
-    private $city = "";
+    private $city = "unknown";
 
     /**
      * @var string
      */
-    private $zip = "";
+    private $zip = "unknown";
+
+    /**
+     * @var string
+     */
+    private $county = "unknown";
 
     /**
      * City getter
@@ -65,5 +70,26 @@ class Location
         return $this;
     }
 
+    /**
+     * County getter
+     *
+     * @return string
+     */
+    public function getCounty(): string
+    {
+        return $this->county;
+    }
 
+    /**
+     * County setter
+     *
+     * @param string $county
+     * @return Location
+     */
+    public function setCounty(string $county): Location
+    {
+        $this->county = $county;
+
+        return $this;
+    }
 }

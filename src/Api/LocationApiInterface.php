@@ -10,7 +10,7 @@ namespace CLIApplication\Api;
 interface LocationApiInterface
 {
     /**
-     * Return array of Locations objects
+     * Return locations array
      *
      * @param array $cities
      * @return array

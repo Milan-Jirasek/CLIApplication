@@ -20,7 +20,18 @@ class LocationManagerTest extends TestCase
 
     public function testCreate()
     {
-        $created = $this->manager->create();
-        $this->assertInstanceOf(Location::class, $created);
+        $expected = new Location();
+        $expected
+            ->setCity("City")
+            ->setZip("ZipCode")
+            ->setCounty("BeautifulCounty");
+
+        $created = $this->manager->create([
+            "city" => "City",
+            "zip" => "ZipCode",
+            "county" => "BeautifulCounty",
+        ]);
+
+        $this->assertEquals($expected, $created);
     }
 }

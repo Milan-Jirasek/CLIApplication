@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+namespace CLIApplication;
+
+require __DIR__ . DIRECTORY_SEPARATOR . '../vendor/autoload.php';
+
+use BeSimple\SoapClient\SoapClientBuilder;
+use BeSimple\SoapCommon\SoapRequest;
+use CLIApplication\Api\SoapLocationApi;
+use CLIApplication\Command\GetZipsByCities;
+use CLIApplication\Configuration\SoapYamlFileConfiguration;
+use CLIApplication\Exception\BadSearchedCityCount;
+use CLIApplication\Exception\MissingConfigurationAttribute;
+use CLIApplication\Manager\LocationManager;
+use Symfony\Component\Console\Application;
+
+try {
+    $api = new SoapLocationApi(
+        new SoapClientBuilder(),
+        new SoapRequest(),
+        new SoapYamlFileConfiguration(
+            __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "config.yml"
+        ),
+        new LocationManager()
+    );
+
+    $command = new GetZipsByCities(null, $api);
+
+    $application = new Application();
+    $application->add($command);
+    $application->setCatchExceptions(false);
+    $application->run();
+} catch (\SoapFault $exception) {
+    echo "SOAP ERROR: {$exception->getMessage()}";
+    exit(1);
+} catch (MissingConfigurationAttribute $exception) {
+    echo "CONFIGURATION ERROR: {$exception->getMessage()}";
+    exit(2);
+} catch (BadSearchedCityCount $exception) {
+    echo "INPUT ERROR: {$exception->getMessage()}";
+    exit(3);
+}
