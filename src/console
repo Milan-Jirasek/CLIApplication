@@ -40,4 +40,7 @@ try {
 } catch (BadSearchedCityCount $exception) {
     echo "INPUT ERROR: {$exception->getMessage()}";
     exit(3);
+} catch (\Exception $exception) {
+    echo "UNEXPECTED EXCEPTION: {$exception->getMessage()}";
+    exit(4);
 }
